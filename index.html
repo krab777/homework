@@ -4,16 +4,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    
-	<div id="app">
-		
-	</div>
-
+ 	<div id="app">
+ 		<div v-for="person in people">
+ 			<div class="card-divider text-center">
+				<b>Person name: </b>{{ person.name }}<br>
+				<b>Person kind: </b>{{ person.species }}<br><br>
+			</div>
+ 		</div> 	
+		<hr>
+		<br>
+ 		<div v-for="kind in species">
+ 			<div class="card-divider text-center">
+				<b>Kind name: </b>{{ kind.name }}
+			</div>
+ 		</div> 		
+ 	</div>
 	
 	<script>
-
+		new Vue({
+			el: '#app',
+			data: {
+				people: [],
+				species: []
+			},
+			methods: {
+				getPeople() {
+					axios
+						.get('https://swapi.co/api/people/?format=json')
+						.then((response) => {this.people = response.data.results})
+				},
+				getSpecies() {
+					axios
+						.get('https://swapi.co/api/species/?format=json')
+						.then((response) => {this.species = response.data.results})
+				}
+			},
+			mounted() {
+				this.getPeople()
+				this.getSpecies()
+			},
+			filters: {
+				ifDroid(value) {
+					// // if (true) {}
+					// return value.toFixed(2);
+					// }
+				},
+			}
+		});
 	</script>
 </body>
 </html>
